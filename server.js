@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const { v4: uuidv4 } = require('uuid');
 const { readFromFile, readAndAppend } = require('./helpers/fsUtils');
 
 const PORT = 3001;
@@ -24,8 +25,28 @@ app.get('/notes', (req, res) =>
 
 //route to get all saved notes
 app.get('/api/notes', (req, res) => {
-    console.info(`${req.method} request received for tips`);
+    console.info(`${req.method} request received for notes`);
     readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
+});
+
+//route to save new notes
+app.post('/api/notes', (req, res) => {
+    console.info(`${req.method} request received to add a new note`);
+
+    const { title, text } = req.body;
+
+    if (req.body) {
+        const newNote = {
+            title,
+            text,
+            noteID: uuidv4(),
+        };
+
+        readAndAppend(newNote, './db/db.json');
+        res.json(`Note added successfully`);
+    } else {
+        res.error('Error in adding tip');
+    }
 });
 
 //app listening on defined port
