@@ -1,3 +1,4 @@
+//Dependencies for this file
 const express = require('express');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
@@ -39,13 +40,13 @@ app.post('/api/notes', (req, res) => {
         const newNote = {
             title,
             text,
-            id: uuidv4(),
+            id: uuidv4(), //This function generates a unique id for each note.
         };
 
         readAndAppend(newNote, './db/db.json');
         res.json(`Note added successfully`);
     } else {
-        res.error('Error in adding tip');
+        res.error('Error in adding note');
     }
 });
 
@@ -56,7 +57,7 @@ app.delete('/api/notes/:id', (req, res) => {
         readAndDelete(recID, './db/db.json');
         res.json(`Note deleted successfully`);
     } else {
-        res.error('Error in adding tip');
+        res.error('Error in deleting note');
     }
 })
 

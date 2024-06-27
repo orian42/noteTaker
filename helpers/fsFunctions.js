@@ -1,7 +1,9 @@
+//Dependencies for this file
 const fs = require('fs');
 const { stringify } = require('querystring');
 const fsProm = require('fs').promises;
 
+//function for reading data from a file
 const readFromFile = (file) => {
     return fsProm.readFile(file, 'utf8', (err, data) => {
         if (err) {
@@ -12,11 +14,13 @@ const readFromFile = (file) => {
     });
 }
 
-const writeToFile = (destination, content) =>
-    fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
-        err ? console.error(err) : console.info(`\nData written to ${destination}`)
+//function to write data to a file
+const writeToFile = (file, content) =>
+    fs.writeFile(file, JSON.stringify(content, null, 4), (err) =>
+        err ? console.error(err) : console.info('Data written successfully')
     );
 
+//function to appropriately add a new note data prior to writing it to the file
 const readAndAppend = (content, file) => {
     fs.readFile(file, 'utf8', (err, data) => {
         if (err) {
@@ -29,6 +33,7 @@ const readAndAppend = (content, file) => {
     });
 };
 
+//function to delete a specific note then update the file
 const readAndDelete = (recID, file) => {
     fs.readFile(file, 'utf8', (err, data) => {
         if (err) {
@@ -41,4 +46,4 @@ const readAndDelete = (recID, file) => {
     });
 };
 
-module.exports = { readFromFile, writeToFile, readAndAppend, readAndDelete };
+module.exports = { readFromFile, readAndAppend, readAndDelete };
