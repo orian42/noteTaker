@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-const { readFromFile, readAndAppend } = require('./helpers/fsUtils');
+const { readFromFile, readAndAppend, readAndDelete } = require('./helpers/fsFunctions.js');
 
 const PORT = 3001;
 
@@ -39,7 +39,7 @@ app.post('/api/notes', (req, res) => {
         const newNote = {
             title,
             text,
-            noteID: uuidv4(),
+            id: uuidv4(),
         };
 
         readAndAppend(newNote, './db/db.json');
@@ -48,6 +48,17 @@ app.post('/api/notes', (req, res) => {
         res.error('Error in adding tip');
     }
 });
+
+//route to delete notes
+app.delete('/api/notes/:id', (req, res) => {
+    if (req.body) {
+        const recID = req.params.id;
+        readAndDelete(recID, './db/db.json');
+        res.json(`Note deleted successfully`);
+    } else {
+        res.error('Error in adding tip');
+    }
+})
 
 //app listening on defined port
 app.listen(PORT, () =>
